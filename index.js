@@ -1,18 +1,20 @@
 import express from 'express';
-import fetchOLXTransports from './scraper.js';
-
+import fetchDNSTransports from './scraper.js';  
 const app = express();
-const URL = 'https://www.olx.kz/transport/';
+const URL = 'https://www.dns-shop.kz/catalog/actual/13963825-4034-4ce1-94d0-41fc78eb6d15/?stock=now-today-tomorrow-later&category=17a892f816404e77';
 
 let parsedTransports = [];
 let fetchTime = new Date().toLocaleString();
 
 app.get('/fetch', (req, res) => {
-    fetchOLXTransports(URL).then(transports => {
+    fetchDNSTransports(URL).then(transports => {
         fetchTime = new Date().toLocaleString();
         parsedTransports = transports;
+        res.send("Fetching articles completed.");
+    }).catch(error => {
+        console.error('Error fetching DNS articles:', error);
+        res.status(500).send('Error fetching articles.');
     });
-    res.send("Fetching articles...");
 });
 
 app.get('/lastfetch', (req, res) => {
